@@ -4,7 +4,7 @@
 ## Author: Steve Lane
 ## Date: Friday, 19 May 2017
 ## Synopsis: Script cleans the data into a tidy format.
-## Time-stamp: <2017-05-20 19:24:13 (steve)>
+## Time-stamp: <2017-05-22 20:34:27 (slane)>
 ################################################################################
 ################################################################################
 library(dplyr)
@@ -83,3 +83,4 @@ scores <- left_join(scores, homeLookup) %>%
 ## Save the data
 if(!dir.exists("../data/")) dir.create("../data/")
 saveRDS(scores, "../data/afl-2000.rds")
+saveRDS(homeLookup, "../data/team-lookups.rds")
