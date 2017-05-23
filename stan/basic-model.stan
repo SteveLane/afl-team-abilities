@@ -4,7 +4,7 @@
 // Author: Steve Lane
 // Date: Monday, 22 May 2017
 // Synopsis: Fits a basic difference of abilities model to AFL scores data.
-// Time-stamp: <2017-05-22 20:52:34 (slane)>
+// Time-stamp: <2017-05-23 19:53:00 (steve)>
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -22,6 +22,8 @@ data{
   int<lower=1,upper=nteams> home[ngames];
   /* Away team ID */
   int<lower=1,upper=nteams> away[ngames];
+  /* Ability from previous season (shrunk towards 0) */
+  row_vector[nteams] preSeasonAbility;
   /* Score difference */
   vector[ngames] scoreDiff;
 }
@@ -30,6 +32,8 @@ parameters{
   // Parameters for the model
   /* Home ground advantage (mean) */
   real hga;
+  /* Preseason ability coef */
+  real bPreSeason;
   /* Initial team variation */
   real<lower=0> sigma_a0;
   /* Scaling parameter for variation */
@@ -50,7 +54,7 @@ transformed parameters{
   /* Variation in team abilities across a season */
   row_vector<lower=0>[nteams] sigma_a;
   /* Abilities before season */
-  a[1] = sigma_a0 * eta_a[1];
+  a[1] = bPreSeason * preSeasonAbility + sigma_a0 * eta_a[1];
   /* Adjusted variation */
   sigma_a = tau_a * sigma_a_raw;
   /* Round by round team ability evolution */
@@ -65,6 +69,7 @@ model{
   vector[ngames] a_diff;
   // Priors
   nu ~ gamma(2,0.1);
+  bPreSeason ~ normal(0, 5);
   sigma_a0 ~ normal(0,10);
   sigma_y ~ normal(0,10);
   hga ~ normal(0,5);
