@@ -4,7 +4,7 @@
 ## Author: Steve Lane
 ## Date: Tuesday, 23 May 2017
 ## Synopsis: Contains function definitions for afl abilities modelling.
-## Time-stamp: <2017-05-23 21:18:45 (steve)>
+## Time-stamp: <2017-05-24 19:28:57 (steve)>
 ################################################################################
 ################################################################################
 
@@ -26,7 +26,7 @@ fitToRound <- function(roundNo, allData, teams, preSeasonAbility, model){
                           control = list(adapt_delta = 0.9))
     a <- extract(modOutput, pars = "a")$a
     hga <- extract(modOutput, pars = "hga")$hga
-    hga <- matrix(rep(hga, 9), ncol = 9)
+    hga <- matrix(rep(hga, nrow(oneRound)), ncol = nrow(oneRound))
     diffOut <- hga + a[, roundNo, oneRound$homeInt] -
         a[, roundNo, oneRound$awayInt]
     diffSum <- t(apply(diffOut, 2, quantile, probs = c(0.25, 0.5, 0.75))) %>%

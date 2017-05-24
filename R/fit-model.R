@@ -4,7 +4,7 @@
 ## Author: Steve Lane
 ## Date: Monday, 22 May 2017
 ## Synopsis: Fit the AFL abilities model
-## Time-stamp: <2017-05-23 21:24:03 (steve)>
+## Time-stamp: <2017-05-24 20:40:57 (steve)>
 ################################################################################
 ################################################################################
 library(dplyr)
@@ -175,6 +175,18 @@ ability2016 <- tibble(teamName = character(),
                       low25 = numeric(),
                       mid = numeric(),
                       up75 = numeric())
+predDiff2016 <- tibble(home = character(),
+                       away = character(),
+                       roundInt = integer(),
+                       actualDiff = integer(),
+                       mid = numeric(),
+                       low25 = numeric(),
+                       up75 = numeric())
+allFits <- sapply(seq_len(max(scores2016$roundInt)), function(gm){
+    fit <- fitToRound(gm, scores2016, teams, rep(0, 18), model)
+    fit
+})
+
 ability2016 <- bind_rows(
     ability2016,
     test1$abilities,
